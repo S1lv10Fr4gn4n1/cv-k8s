@@ -1,0 +1,31 @@
+# https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: v1
+kind: Service
+metadata:
+  name: cv-service-1
+  annotations:
+    konghq.com/override: cv-kongingress-service-1
+    konghq.com/plugins: cv-service-1-rate-limiting
+spec:
+  selector:
+    app: cv-service-1
+  ports:
+    - name: http
+      port: 8080
+  type: ClusterIP
+  
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cv-service-2
+  annotations:
+    konghq.com/plugins: cv-service-2-rate-limiting
+spec:
+  selector:
+    app: cv-service-2
+  ports:
+    - name: http
+      port: 8080
+  type: ClusterIP

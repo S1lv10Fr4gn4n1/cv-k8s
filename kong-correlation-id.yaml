@@ -1,0 +1,11 @@
+# https://docs.konghq.com/hub/kong-inc/correlation-id/
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: cv-cluster-header-id
+config:
+  header_name: cv-request-id
+  # uuid, uuid#counter, tracker
+  generator: uuid#counter 
+  echo_downstream: false
+plugin: correlation-id

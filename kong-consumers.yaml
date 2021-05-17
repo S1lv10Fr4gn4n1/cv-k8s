@@ -1,0 +1,30 @@
+# https://docs.konghq.com/kubernetes-ingress-controller/1.2.x/guides/using-consumer-credential-resource/
+apiVersion: configuration.konghq.com/v1
+kind: KongConsumer
+metadata:
+  name: silvio
+  annotations:
+    kubernetes.io/ingress.class: kong
+username: silvio
+credentials:
+- silvio-jwt
+
+---
+
+# https://kubernetes.io/docs/concepts/configuration/secret/
+# https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-kubectl/
+# https://docs.konghq.com/kubernetes-ingress-controller/1.2.x/guides/configure-acl-plugin/
+apiVersion: v1
+kind: Secret
+metadata:
+  name: silvio-jwt
+type: Opaque
+stringData:
+  kongCredType: jwt
+  # iss key_claim_name
+  key: "my-dummy-key"
+  # jwt secret
+  secret: "my-dummy-secret"
+  algorithm: RS256
+  rsa_public_key: |-
+{rsa_public_key}

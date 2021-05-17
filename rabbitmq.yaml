@@ -1,0 +1,141 @@
+# https://www.rabbitmq.com/getstarted.html
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rabbitmq
+  
+---         
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cv-rabbitmq
+  namespace: rabbitmq
+spec:
+  replicas: 1
+  serviceName: cv-rabbitmq
+  volumeClaimTemplates:
+  - metadata:
+      name: rabbitmq-data
+      namespace: rabbitmq
+    spec:
+      storageClassName: standard
+      # TODO SFS, class for Digital Ocean, split Volume claim by cloud provider
+      # storageClassName: do-block-storage
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: "3Gi"
+  selector:
+    matchLabels:
+      app: cv-rabbitmq
+  template:
+    metadata:
+      labels:
+        app: cv-rabbitmq
+    spec:
+      containers:
+      - name: cv-rabbitmq
+        image: rabbitmq:3.8.16-management-alpine
+        resources:
+          requests:
+            memory: 400Mi
+            cpu: 300m
+          limits:
+            memory: 400Mi
+            cpu: 300m
+        env:
+        - name: RABBITMQ_ERLANG_COOKIE
+          value: "1WqgH8N2v1qDBDZDbNy8Bg9IkPWLEpu79m6q+0t36lQ="
+        volumeMounts:
+        - mountPath: /var/lib/rabbitmq
+          name: rabbitmq-data
+      volumes:
+        - name: rabbitmq-data
+          hostPath:
+            path: /data/rabbitmq
+            type: DirectoryOrCreate~
+
+---
+
+# Quick open Rabbit Management
+# Replace ClusterIP by LoadBalancer and apply it
+# google-chrome http://$(kubectl get svc --namespace rabbitmq cv-rabbitmq-management -o jsonpath='{.spec.clusterIP}:{.spec.ports[0].port}')
+apiVersion: v1
+kind: Service
+metadata:
+  name: cv-rabbitmq-management
+  namespace: rabbitmq
+  labels:
+    app: cv-rabbitmq
+spec:
+  selector:
+    app: cv-rabbitmq
+  ports:
+   - name: http
+     protocol: TCP
+     port: 15672
+  type: LoadBalancer
+  # type: ClusterIP
+  
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cv-rabbitmq-amqp
+  namespace: rabbitmq
+  labels:
+    app: cv-rabbitmq
+    type: LoadBalancer
+spec:
+  selector:
+    app: cv-rabbitmq
+  ports:
+   - name: amqp
+     protocol: TCP
+     port: 5672
+  type: ClusterIP
+  
+  
+# ---
+# TODO SFS work on scaling Rabbit later
+# apiVersion: autoscaling/v2beta2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: hpa-cv-rabbitmq
+#   namespace: rabbitmq
+# spec:
+#   maxReplicas: 4
+#   minReplicas: 2
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: StatefulSet
+#     name: cv-rabbitmq
+#   metrics:
+#   - type: Resource
+#     resource:
+#       name: cpu
+#       target:
+#         type: Utilization
+#         averageUtilization: 70
+#   - type: Resource
+#     resource:
+#       name: memory
+#       target:
+#         type: Utilization
+#         averageUtilization: 70
+#   behavior:
+#     scaleDown:
+#       stabilizationWindowSeconds: 60
+#       policies:
+#       - type: Percent
+#         value: 50
+#         periodSeconds: 15
+#     scaleUp:
+#       stabilizationWindowSeconds: 10
+#       policies:
+#       - type: Percent
+#         value: 50
+#         periodSeconds: 15

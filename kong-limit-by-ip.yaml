@@ -1,0 +1,22 @@
+# https://docs.konghq.com/hub/kong-inc/rate-limiting/
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: cv-service-1-rate-limiting
+config:
+  limit_by: ip
+  second: 50
+  policy: local
+plugin: rate-limiting
+
+---
+
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: cv-service-2-rate-limiting
+config:
+  limit_by: ip
+  second: 50
+  policy: local
+plugin: rate-limiting

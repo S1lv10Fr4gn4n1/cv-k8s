@@ -1,0 +1,16 @@
+# https://docs.konghq.com/hub/kong-inc/jwt/
+apiVersion: configuration.konghq.com/v1
+kind: KongClusterPlugin
+metadata:
+  name: kong-global-jwt
+  annotations:
+    kubernetes.io/ingress.class: kong
+  labels:
+    global: "true"
+config: 
+  secret_is_base64: false
+  run_on_preflight: true
+  claims_to_verify:
+  - exp
+  - nbf
+plugin: jwt

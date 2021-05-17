@@ -1,0 +1,29 @@
+# https://github.com/Kong/kubernetes-ingress-controller#get-started
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cv-ingress
+  annotations:
+    kubernetes.io/ingress.class: kong
+    konghq.com/plugins: cv-cluster-header-id
+    # curl -k https://<lb>/cv1/helloworld, -k skipps cerficate validation
+    # konghq.com/protocols: https 
+    # konghq.com/https-redirect-status-code: "301"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /cv1
+        pathType: Prefix
+        backend:
+          service:
+            name: cv-service-1
+            port:
+              number: 8080
+      - path: /cv2
+        pathType: Prefix
+        backend:
+          service:
+            name: cv-service-2
+            port:
+              number: 8080

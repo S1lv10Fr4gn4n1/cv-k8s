@@ -1,0 +1,88 @@
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cv-service-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cv-service-1
+  template:
+    metadata:
+      labels:
+        app: cv-service-1
+    spec:
+      containers:
+      - name: cv-service-1
+        image: silviofragnani/cv-service-1:0.1.25
+        envFrom:
+        - configMapRef:
+            name: rabbitmq-config
+        resources:
+          requests:
+            memory: 250Mi
+            cpu: 150m
+          limits:
+            memory: 250Mi
+            cpu: 150m
+            
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cv-service-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cv-service-2
+  template:
+    metadata:
+      labels:
+        app: cv-service-2
+    spec:
+      containers:
+      - name: cv-service-2
+        image: silviofragnani/cv-service-2:0.1.10
+        envFrom:
+        - configMapRef:
+            name: rabbitmq-config
+        resources:
+          requests:
+            memory: 200Mi
+            cpu: 100m
+          limits:
+            memory: 200Mi
+            cpu: 100m
+            
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cv-reporting
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cv-reporting
+  template:
+    metadata:
+      labels:
+        app: cv-reporting
+    spec:
+      containers:
+      - name: cv-reporting
+        image: silviofragnani/cv-reporting:0.1.8
+        envFrom:
+        - configMapRef:
+            name: rabbitmq-config
+        resources:
+          requests:
+            memory: 200Mi
+            cpu: 100m
+          limits:
+            memory: 200Mi
+            cpu: 100m
