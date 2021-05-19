@@ -1,7 +1,7 @@
 # cv-k8s
 
 ## Description
-The goal of this study project is to demonstrate how to use a few tools to create a Kubernetes cluster and deploy a few services.
+The goal of this project is to learn how to use Kubernetes and deploy a few services into it.
 
 <br/>
 
@@ -29,9 +29,8 @@ The goal of this study project is to demonstrate how to use a few tools to creat
     - The image is hosted at [Docker Hub](https://hub.docker.com/repository/docker/silviofragnani/cv-service-2) 
     - `cv2/healthcheck`
     - `cv2/helloworld`
-- MQ (coming soon)
-- cv-producer or cronjob? (coming soon)
-- cv-consumer (coming soon)
+- [RabbitMQ](https://www.rabbitmq.com/) lightweight Message Queue to implement event-driven architecture
+- [cv-reporting](https://github.com/s1lv10fr4gn4n1-org/cv-reporting), it's a microservice placeholder which consumes events produced by cv-service-1 and cv-service-2
 
 </br>
 
@@ -53,11 +52,17 @@ The goal of this study project is to demonstrate how to use a few tools to creat
 <br/>
 
 ### Starting k8s cluster
-Running `$ ./k8s.sh`, it will prepare the k8s cluster and make it ready.
+Running `$ ./_k8s-apply.sh`, it will prepare the k8s cluster and make it ready.
 - it runs the script `_rsa-generator.py` which will use `openSSL` to create the RSA public and private keys, and assign the public key to the k8s `Secret` in `kong-consumers.yaml` 
-- it installs the Kong Ingress Constroller using `kubectl apply -f https://bit.ly/k4k8s`
+- it installs the Kong Ingress Controller using `kubectl apply -f https://bit.ly/k4k8s`
 - it installs all the resources on the cluster `kubectl apply -f .`
 - it runs the script `_jwt-generator.py` which will use the private and public RSA keys to create a valid JWT token and print out on terminal to be used later 
+
+<br/>
+
+### Destroy a k8s cluster
+This step is important in case the cluster is running in a cloud provider, besides deleting all the services, it will also delete the loadbalancer which is usually is costly
+- run `$ ./_k8s-delete.sh`
 
 <br/>
 
