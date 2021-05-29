@@ -19,18 +19,18 @@ The goal of this project is to learn how to use Kubernetes and deploy a few serv
     - [Kong JWT plugin](https://docs.konghq.com/hub/kong-inc/jwt/) authorization using RSA
     - [Kong Correlation ID plugin](https://docs.konghq.com/hub/kong-inc/correlation-id/) to add unique ID header on requests/responses
     - [Kong Rate Limiting plugin](https://docs.konghq.com/hub/kong-inc/rate-limiting/) to limit the hiting on the api by period
-- [cv-service-1](https://github.com/s1lv10fr4gn4n1-org/cv-service-1), it's a microservice placeholder for a future Computer Vision service api.
+- [cv-service-1](https://github.com/s1lv10fr4gn4n1/cv-service-1), it's a microservice placeholder for a future Computer Vision service api.
     - CI/CD using [CircleCi](https://circleci.com/)
     - The image is hosted at [Docker Hub](https://hub.docker.com/repository/docker/silviofragnani/cv-service-1) 
     - `cv1/healthcheck`
     - `cv1/helloworld`
-- [cv-service-2](https://github.com/s1lv10fr4gn4n1-org/cv-service-2), it's a microservice placeholder for a future Computer Vision service api. 
+- [cv-service-2](https://github.com/s1lv10fr4gn4n1/cv-service-2), it's a microservice placeholder for a future Computer Vision service api. 
     - CI/CD using [CircleCi](https://circleci.com/)
     - The image is hosted at [Docker Hub](https://hub.docker.com/repository/docker/silviofragnani/cv-service-2) 
     - `cv2/healthcheck`
     - `cv2/helloworld`
 - [RabbitMQ](https://www.rabbitmq.com/) lightweight Message Queue to implement event-driven architecture
-- [cv-reporting](https://github.com/s1lv10fr4gn4n1-org/cv-reporting), it's a microservice placeholder which consumes events produced by cv-service-1 and cv-service-2
+- [cv-reporting](https://github.com/s1lv10fr4gn4n1/cv-reporting), it's a microservice placeholder which consumes events produced by cv-service-1 and cv-service-2
 
 </br>
 
